@@ -1,5 +1,6 @@
 package com.phuclong.milktea.milktea.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Drink {
     private List<String> images;
 
     private boolean available;
+    @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
     private boolean isVegetarian;
