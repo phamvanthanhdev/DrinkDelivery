@@ -1,6 +1,6 @@
 package com.phuclong.milktea.milktea.controller;
 
-import com.phuclong.milktea.milktea.model.IngredientCategory;
+import com.phuclong.milktea.milktea.model.IngredientsCategory;
 import com.phuclong.milktea.milktea.model.IngredientsItem;
 import com.phuclong.milktea.milktea.request.IngredientCategoryRequest;
 import com.phuclong.milktea.milktea.request.IngredientRequest;
@@ -19,10 +19,10 @@ public class IngredientController {
     private IngredientsService ingredientsService;
 
     @PostMapping("/category")
-    public ResponseEntity<IngredientCategory> createIngredientCategory(
+    public ResponseEntity<IngredientsCategory> createIngredientCategory(
             @RequestBody IngredientCategoryRequest req
             ) throws Exception {
-        IngredientCategory item = ingredientsService.createIngredientCategory(req.getName(), req.getRestaurantId());
+        IngredientsCategory item = ingredientsService.createIngredientCategory(req.getName(), req.getRestaurantId());
 
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
@@ -55,10 +55,10 @@ public class IngredientController {
     }
 
     @GetMapping("/restaurant/{id}/category")
-    public ResponseEntity<List<IngredientCategory>> restaurantIngredientCategory(
+    public ResponseEntity<List<IngredientsCategory>> restaurantIngredientCategory(
             @PathVariable Long id
     ) throws Exception {
-        List<IngredientCategory> ingredientCategories = ingredientsService.findIngredientCategoryByRestaurantId(id);
+        List<IngredientsCategory> ingredientCategories = ingredientsService.findIngredientCategoryByRestaurantId(id);
 
         return new ResponseEntity<>(ingredientCategories, HttpStatus.OK);
     }

@@ -1,6 +1,6 @@
 package com.phuclong.milktea.milktea.service;
 
-import com.phuclong.milktea.milktea.model.IngredientCategory;
+import com.phuclong.milktea.milktea.model.IngredientsCategory;
 import com.phuclong.milktea.milktea.model.IngredientsItem;
 import com.phuclong.milktea.milktea.model.Restaurant;
 import com.phuclong.milktea.milktea.repository.IngredientCategoryRepository;
@@ -21,10 +21,10 @@ public class IngredientServiceImp implements IngredientsService{
     private RestaurantService restaurantService;
 
     @Override
-    public IngredientCategory createIngredientCategory(String name, Long restaurantId) throws Exception {
+    public IngredientsCategory createIngredientCategory(String name, Long restaurantId) throws Exception {
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
 
-        IngredientCategory ingredientsCategory = new IngredientCategory();
+        IngredientsCategory ingredientsCategory = new IngredientsCategory();
         ingredientsCategory.setRestaurant(restaurant);
         ingredientsCategory.setName(name);
 
@@ -32,8 +32,8 @@ public class IngredientServiceImp implements IngredientsService{
     }
 
     @Override
-    public IngredientCategory findIngredientCategory(Long id) throws Exception {
-        Optional<IngredientCategory> otp = ingredientCategoryRepository.findById(id);
+    public IngredientsCategory findIngredientCategory(Long id) throws Exception {
+        Optional<IngredientsCategory> otp = ingredientCategoryRepository.findById(id);
         if(otp.isEmpty()){
             throw new Exception("ingredient category not found");
         }
@@ -42,7 +42,7 @@ public class IngredientServiceImp implements IngredientsService{
     }
 
     @Override
-    public List<IngredientCategory> findIngredientCategoryByRestaurantId(Long id) throws Exception {
+    public List<IngredientsCategory> findIngredientCategoryByRestaurantId(Long id) throws Exception {
         Restaurant restaurant = restaurantService.findRestaurantById(id);
         return ingredientCategoryRepository.findByRestaurantId(restaurant.getId());
     }
@@ -50,16 +50,18 @@ public class IngredientServiceImp implements IngredientsService{
     @Override
     public IngredientsItem createIngredientItem(Long restaurantId, String ingredientName, Long categoryId) throws Exception {
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
-        IngredientCategory ingredientCategory = findIngredientCategory(categoryId);
+        IngredientsCategory ingredientsCategory = findIngredientCategory(categoryId);
 
         IngredientsItem item = new IngredientsItem();
         item.setName(ingredientName);
         item.setRestaurant(restaurant);
-        item.setCategory(ingredientCategory);
+        item.setCategory(ingredientsCategory);
 
         IngredientsItem ingredient = ingredientItemRepository.save(item);
 
-        ingredientCategory.getIngredients().add(ingredient);
+        ingredientsCategory.getIngredients().add(ingredient);
+
+        //ingredientCategoryRepository.save(ingredientsCategory);
 
         return ingredient;
     }

@@ -16,7 +16,7 @@ public class IngredientsItem {
     private Long id;
     private String name;
     @ManyToOne
-    private IngredientCategory category;
+    private IngredientsCategory category;
     @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
