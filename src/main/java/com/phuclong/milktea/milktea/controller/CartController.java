@@ -7,6 +7,7 @@ import com.phuclong.milktea.milktea.request.AddCartItemRequest;
 import com.phuclong.milktea.milktea.request.UpdateCartItemRequest;
 import com.phuclong.milktea.milktea.response.MessageResponse;
 import com.phuclong.milktea.milktea.service.CartService;
+import com.phuclong.milktea.milktea.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
     @Autowired
     private CartService cartService;
+    @Autowired
+    private UserService userService;
 
     @PutMapping("/cart/add")
     public ResponseEntity<CartItem> addItemToCart(
@@ -45,14 +48,16 @@ public class CartController {
     @PutMapping("/cart/clear")
     public ResponseEntity<Cart> clearCart(
             @RequestHeader("Authorization") String jwt) throws Exception {
-        Cart cart = cartService.clearCart(jwt);
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.clearCart(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @PutMapping("/cart")
     public ResponseEntity<Cart> findUserCart(
             @RequestHeader("Authorization") String jwt) throws Exception {
-        Cart cart = cartService.findCartByUserId(jwt);
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.findCartByUserId(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 }
