@@ -63,13 +63,5 @@ public class HomeController {
         return new ResponseEntity<>(drink, HttpStatus.OK);
     }
 
-    @GetMapping("/category/restaurant/{id}")
-    public ResponseEntity<List<Category>> getCategoryRestaurantId(
-            @PathVariable Long id) throws Exception {
 
-        Restaurant restaurant = restaurantService.findRestaurantById(id);
-        List<Category> categories = categoryService.findCategoryByRestaurantId(restaurant.getId());
-
-        return new ResponseEntity<>(categories, HttpStatus.OK);
-    }
 }
