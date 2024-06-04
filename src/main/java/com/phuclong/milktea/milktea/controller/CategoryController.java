@@ -45,7 +45,8 @@ public class CategoryController {
 
     @GetMapping("/category/restaurant/{id}")
     public ResponseEntity<List<Category>> getCategoryRestaurantId(
-            @PathVariable Long id) throws Exception {
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String jwt) throws Exception {
 
         Restaurant restaurant = restaurantService.findRestaurantById(id);
         List<Category> categories = categoryService.findCategoryByRestaurantId(restaurant.getId());
