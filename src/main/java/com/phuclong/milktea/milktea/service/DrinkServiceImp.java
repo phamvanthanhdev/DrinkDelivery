@@ -116,4 +116,10 @@ public class DrinkServiceImp implements DrinkService{
         drink.setAvailable(!drink.isAvailable());
         return drinkRepository.save(drink);
     }
+
+    @Override
+    public List<Drink> getAllDrinks() {
+        List<Drink> drinks = drinkRepository.findAll();
+        return drinks;
+    }
 }

@@ -17,4 +17,5 @@ public interface DrinkService {
     public List<Drink> searchDrink(String keyword);
     public Drink findDrinkById(Long drinkId) throws Exception;
     public Drink updateAvailabilityStatus(Long drinkId) throws Exception;
+    public List<Drink> getAllDrinks();
 }
