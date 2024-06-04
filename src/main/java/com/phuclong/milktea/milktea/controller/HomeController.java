@@ -1,8 +1,10 @@
 package com.phuclong.milktea.milktea.controller;
 
+import com.phuclong.milktea.milktea.model.Category;
 import com.phuclong.milktea.milktea.model.Drink;
 import com.phuclong.milktea.milktea.model.Restaurant;
 import com.phuclong.milktea.milktea.model.User;
+import com.phuclong.milktea.milktea.service.CategoryService;
 import com.phuclong.milktea.milktea.service.DrinkService;
 import com.phuclong.milktea.milktea.service.RestaurantService;
 import com.phuclong.milktea.milktea.service.UserService;
@@ -20,6 +22,8 @@ public class HomeController {
     private RestaurantService restaurantService;
     @Autowired
     private DrinkService drinkService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping
     public ResponseEntity<String> HomeController(){
@@ -57,5 +61,15 @@ public class HomeController {
         Drink drink = drinkService.findDrinkById(id);
 
         return new ResponseEntity<>(drink, HttpStatus.OK);
+    }
+
+    @GetMapping("/category/restaurant/{id}")
+    public ResponseEntity<List<Category>> getCategoryRestaurantId(
+            @PathVariable Long id) throws Exception {
+
+        Restaurant restaurant = restaurantService.findRestaurantById(id);
+        List<Category> categories = categoryService.findCategoryByRestaurantId(restaurant.getId());
+
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 }
