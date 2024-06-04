@@ -34,11 +34,28 @@ public class HomeController {
         return new ResponseEntity<>(restaurants, HttpStatus.OK);
     }
 
+    @GetMapping("/restaurants/{id}")
+    public ResponseEntity<Restaurant> getRestaurantDetail(@PathVariable Long id) throws Exception {
+
+        Restaurant restaurant = restaurantService.findRestaurantById(id);
+
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
+
+
     @GetMapping("/drinks")
     public ResponseEntity<List<Drink>> getAllDrink() throws Exception {
 
         List<Drink> drinks = drinkService.getAllDrinks();
 
         return new ResponseEntity<>(drinks, HttpStatus.OK);
+    }
+
+    @GetMapping("/drinks/{id}")
+    public ResponseEntity<Drink> getDrinkById(@PathVariable Long id) throws Exception {
+
+        Drink drink = drinkService.findDrinkById(id);
+
+        return new ResponseEntity<>(drink, HttpStatus.OK);
     }
 }
