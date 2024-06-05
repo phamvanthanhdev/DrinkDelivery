@@ -28,7 +28,7 @@ public class Drink {
     private List<String> images;
 
     private boolean available;
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
     private boolean isVegetarian;
