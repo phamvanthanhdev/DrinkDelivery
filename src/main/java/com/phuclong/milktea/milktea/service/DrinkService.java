@@ -14,6 +14,8 @@ public interface DrinkService {
             Long restaurantId, boolean isVegetarian,
             boolean isNonveg, boolean isSeasonal,
             String drinkCategory);
+    public List<Drink> getRestaurantsAllDrink(
+            Long restaurantId);
     public List<Drink> searchDrink(String keyword);
     public Drink findDrinkById(Long drinkId) throws Exception;
     public Drink updateAvailabilityStatus(Long drinkId) throws Exception;

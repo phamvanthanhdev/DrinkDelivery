@@ -50,4 +50,26 @@ public class DrinkController {
 
         return new ResponseEntity<>(drinks, HttpStatus.OK);
     }
+
+    @GetMapping("/restaurants/{restaurantId}")
+    public ResponseEntity<List<Drink>> getRestaurantsDrink(@PathVariable Long restaurantId,
+                                                          @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        List<Drink> drinks = drinkService.
+                getRestaurantsAllDrink(restaurantId);
+
+        return new ResponseEntity<>(drinks, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Drink> getDrink(@PathVariable Long id,
+                                                           @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        Drink drink = drinkService.
+                findDrinkById(id);
+
+        return new ResponseEntity<>(drink, HttpStatus.OK);
+    }
 }

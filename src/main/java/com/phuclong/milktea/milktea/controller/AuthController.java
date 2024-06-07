@@ -1,6 +1,7 @@
 package com.phuclong.milktea.milktea.controller;
 
 import com.phuclong.milktea.milktea.config.JwtProvider;
+import com.phuclong.milktea.milktea.design.singleton.EmailValidation;
 import com.phuclong.milktea.milktea.model.Cart;
 import com.phuclong.milktea.milktea.model.USER_ROLE;
 import com.phuclong.milktea.milktea.model.User;
@@ -42,6 +43,12 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
+        //Singleton Design Pattern
+        EmailValidation validation = EmailValidation.getInstance();
+        if(!validation.isValidEmailAddress(user.getEmail())){
+            throw new Exception("Email is invalid");
+        }
+
         User isEmailExits = userRepository.findByEmail(user.getEmail());
         if(isEmailExits != null){
             throw new Exception("Email is already used with another account");

@@ -1,5 +1,7 @@
 package com.phuclong.milktea.milktea.serviceimp;
 
+import com.phuclong.milktea.milktea.design.builder.AddressDirector;
+import com.phuclong.milktea.milktea.design.builder.VNAddressBuilder;
 import com.phuclong.milktea.milktea.dto.RestaurantDto;
 import com.phuclong.milktea.milktea.model.Address;
 import com.phuclong.milktea.milktea.model.Restaurant;
@@ -29,7 +31,18 @@ public class RestaurantServiceImp implements RestaurantService {
 
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequest req, User user) {
-        Address address = addressRepository.save(req.getAddress());
+        // Builder Used
+        String street = req.getAddress().getStreetAddress();
+        String city = req.getAddress().getCity();
+        String provide = req.getAddress().getStateProvice();
+        String country = req.getAddress().getCounty();
+
+        AddressDirector director = new AddressDirector();
+        VNAddressBuilder builder = new VNAddressBuilder();
+        director.construct(builder, street, city, provide, country);
+        Address newAddress = builder.getAddress();
+
+        Address address = addressRepository.save(newAddress);
 
         Restaurant restaurant = new Restaurant();
         restaurant.setAddress(address);

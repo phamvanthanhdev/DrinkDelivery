@@ -1,24 +1,27 @@
-package com.phuclong.milktea.milktea.service;
+package com.phuclong.milktea.milktea.design.facade;
 
 import com.phuclong.milktea.milktea.design.chainOfResponsibility.AddressCheckHandler;
 import com.phuclong.milktea.milktea.design.chainOfResponsibility.CartCheckHandler;
 import com.phuclong.milktea.milktea.design.chainOfResponsibility.OrderHandler;
 import com.phuclong.milktea.milktea.design.chainOfResponsibility.PaymentProcessCheckHandler;
 import com.phuclong.milktea.milktea.model.*;
-import com.phuclong.milktea.milktea.repository.*;
+import com.phuclong.milktea.milktea.repository.AddressRepository;
+import com.phuclong.milktea.milktea.repository.OrderItemRepository;
+import com.phuclong.milktea.milktea.repository.OrderRepository;
+import com.phuclong.milktea.milktea.repository.UserRepository;
 import com.phuclong.milktea.milktea.request.OrderRequest;
+import com.phuclong.milktea.milktea.service.CartService;
+import com.phuclong.milktea.milktea.service.CartServiceImp;
+import com.phuclong.milktea.milktea.service.RestaurantService;
+import com.phuclong.milktea.milktea.serviceimp.RestaurantServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Service
-public class OrderServiceImp implements OrderService{
+public class OrderFacadeImp implements OrderFacadeService{
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -27,10 +30,13 @@ public class OrderServiceImp implements OrderService{
     private AddressRepository addressRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RestaurantService restaurantService;
-    @Autowired
-    private CartService cartService;
+    private final RestaurantService restaurantService;
+    private final CartService cartService;
+
+    public OrderFacadeImp() {
+        this.restaurantService = new RestaurantServiceImp();
+        this.cartService = new CartServiceImp();
+    }
 
     @Override
     public Order createOrder(OrderRequest req, User user) throws Exception {
@@ -116,24 +122,6 @@ public class OrderServiceImp implements OrderService{
         orderRepository.deleteById(order.getId());
     }
 
-    @Override
-    public List<Order> getUsersOrder(Long userId) throws Exception {
-        return orderRepository.findByCustomerId(userId);
-    }
-
-    @Override
-    public List<Order> getRestaurantsOrder(Long restaurantId, String orderStatus) throws Exception {
-        List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
-        if(orders!=null){
-            if (orderStatus != null)
-                orders = orders.stream()
-                        .filter(order -> order.getOrderStatus().equals(orderStatus))
-                        .collect(Collectors.toList());
-        }
-        return orders;
-    }
-
-    @Override
     public Order findOrderById(Long orderId) throws Exception {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
         if(orderOptional.isEmpty()){
