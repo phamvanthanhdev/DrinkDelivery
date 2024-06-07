@@ -20,4 +20,5 @@ public interface DrinkService {
     public Drink findDrinkById(Long drinkId) throws Exception;
     public Drink updateAvailabilityStatus(Long drinkId) throws Exception;
     public List<Drink> getAllDrinks();
+    public List<Drink> getDrinksRestaurantNotPromotion(Restaurant restaurant);
 }

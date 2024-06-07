@@ -203,4 +203,9 @@ public class DrinkServiceImp implements DrinkService{
         List<Drink> drinks = drinkRepository.findAll();
         return drinks;
     }
+
+    @Override
+    public List<Drink> getDrinksRestaurantNotPromotion(Restaurant restaurant) {
+        return drinkRepository.findDrinksByRestaurantNotInPromotion(restaurant);
+    }
 }

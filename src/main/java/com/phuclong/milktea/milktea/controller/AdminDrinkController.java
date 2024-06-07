@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin/drink")
 public class AdminDrinkController {
@@ -59,5 +61,16 @@ public class AdminDrinkController {
         drink = promotionService.getDrinkPromotion(drink.getId());
 
         return new ResponseEntity<>(drink, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/restaurant/not-promotion")
+    public ResponseEntity<List<Drink>> getDrinksRestaurantNotPromtion(
+                                                               @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        Restaurant restaurant = restaurantService.getRestaurantByUserId(user.getId());
+
+        List<Drink> drinks = drinkService.getDrinksRestaurantNotPromotion(restaurant);
+
+        return new ResponseEntity<>(drinks, HttpStatus.CREATED);
     }
 }
