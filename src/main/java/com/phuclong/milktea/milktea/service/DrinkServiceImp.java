@@ -62,7 +62,9 @@ public class DrinkServiceImp implements DrinkService{
             Drink drink = (Drink) iter.next();
             if(isVegetarian == drink.isVegetarian() && isSeasonal == drink.isSeasonal()){
                 if(drinkCategory!=null) {
-                    if (drink.getDrinkCategory().getName().equals(drinkCategory)) {
+                    if(drinkCategory.trim().equals("")){
+                        drinksFilter.add(drink);
+                    }else if (drink.getDrinkCategory().getName().equals(drinkCategory)) {
                         drinksFilter.add(drink);
                     }
                 }else{
