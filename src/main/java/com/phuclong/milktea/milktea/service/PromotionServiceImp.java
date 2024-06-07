@@ -1,6 +1,8 @@
 package com.phuclong.milktea.milktea.service;
 
 import com.phuclong.milktea.milktea.design.decorator.*;
+import com.phuclong.milktea.milktea.design.iterator.DrinkCollection;
+import com.phuclong.milktea.milktea.design.iterator.Iterator;
 import com.phuclong.milktea.milktea.model.Drink;
 import com.phuclong.milktea.milktea.model.Restaurant;
 import com.phuclong.milktea.milktea.repository.PromotionRepository;
@@ -133,5 +135,65 @@ public class PromotionServiceImp implements PromotionService{
         return null;
     }
 
+    @Override
+    public List<Drink> getFilterRestaurantsDrink(Long restaurantId,
+                                           boolean isVegetarian,
+                                           boolean isNonveg,
+                                           boolean isSeasonal,
+                                           String drinkCategory) {
+        List<Drink> drinks = drinkService.getRestaurantsAllDrink(restaurantId);
 
+
+        if(isVegetarian){
+            drinks = filterByVegetarian(drinks, isVegetarian);
+        }
+        if(isNonveg){
+            drinks = filterByNonveg(drinks, isNonveg);
+        }
+        if(isSeasonal){
+            drinks = filterBySeasonal(drinks, isSeasonal);
+        }
+        if(drinks!=null && !drinkCategory.equals("")){
+            drinks = filterByCategory(drinks, drinkCategory);
+        }
+
+        drinks = drinks.stream().map(drink -> {
+            try {
+                return getDrinkPromotion(drink.getId());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
+
+        return drinks;
+    }
+
+    private List<Drink> filterByCategory(List<Drink> drinks, String drinkCategory) {
+        return drinks.stream().
+                filter(drink -> {
+                    if(drink.getDrinkCategory() != null){
+                        return drink.getDrinkCategory().getName().equals(drinkCategory);
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<Drink> filterBySeasonal(List<Drink> drinks, boolean isSeasonal) {
+        return drinks.stream().
+                filter(drink -> drink.isSeasonal() == isSeasonal)
+                .collect(Collectors.toList());
+    }
+
+    private List<Drink> filterByNonveg(List<Drink> drinks, boolean isNonveg) {
+        return drinks.stream().
+                filter(drink -> drink.isVegetarian() == false)
+                .collect(Collectors.toList());
+    }
+
+    private List<Drink> filterByVegetarian(List<Drink> drinks, boolean isVegetarian) {
+        return drinks.stream().
+                filter(drink -> drink.isVegetarian() == isVegetarian)
+                .collect(Collectors.toList());
+    }
 }

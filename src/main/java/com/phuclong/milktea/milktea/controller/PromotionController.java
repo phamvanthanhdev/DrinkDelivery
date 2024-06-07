@@ -63,4 +63,21 @@ public class PromotionController {
 
         return new ResponseEntity<>(drinks, HttpStatus.OK);
     }
+
+    @GetMapping("/drink/restaurant/{restaurantId}")
+    private ResponseEntity<List<Drink>> getFilterDrinksRestaurantPromotion(
+            @PathVariable Long restaurantId,
+            @RequestParam boolean vagetarian,
+            @RequestParam boolean nonveg,
+            @RequestParam boolean seasonal,
+            @RequestParam(required = false) String drinkCategory,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        List<Drink> drinks = promotionService.getFilterRestaurantsDrink(restaurantId,
+                vagetarian, nonveg,
+                seasonal, drinkCategory);
+
+        return new ResponseEntity<>(drinks, HttpStatus.OK);
+    }
 }

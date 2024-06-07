@@ -16,4 +16,9 @@ public interface PromotionService {
     public Promotion createPromotion(AddPromotionRequest req, Restaurant restaurant) throws Exception;
     public Drink getDrinkPromotion(Long drinkId) throws Exception;
     public List<Drink> getDrinksRestaurantPromotion(Restaurant restaurant) throws Exception;
+    public List<Drink> getFilterRestaurantsDrink(Long restaurantId,
+                                                 boolean isVegetarian,
+                                                 boolean isNonveg,
+                                                 boolean isSeasonal,
+                                                 String drinkCategory);
 }
