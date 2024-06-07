@@ -25,16 +25,17 @@ public class DiscountController {
 
     @Autowired
     private DiscountService discountService;
+    @Autowired
+    private PromotionService promotionService;
     @PutMapping("/drink/{drinkId}")
-    private ResponseEntity<MessageResponse> createPromotion(@PathVariable Long drinkId,
+    private ResponseEntity<Drink> updateDiscount(@PathVariable Long drinkId,
                                                             @RequestParam int percent,
                                                             @RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
 
         Drink drink = discountService.updateDiscount(drinkId, percent);
-        MessageResponse messageResponse = new MessageResponse();
-        messageResponse.setMessage("Update discount successfully!");
-        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+        drink = promotionService.getDrinkPromotion(drink.getId());
+        return new ResponseEntity<>(drink, HttpStatus.OK);
     }
 
 }

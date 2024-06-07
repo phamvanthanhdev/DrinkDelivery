@@ -6,6 +6,7 @@ import com.phuclong.milktea.milktea.model.User;
 import com.phuclong.milktea.milktea.request.CreateDrinkRequest;
 import com.phuclong.milktea.milktea.response.MessageResponse;
 import com.phuclong.milktea.milktea.service.DrinkService;
+import com.phuclong.milktea.milktea.service.PromotionService;
 import com.phuclong.milktea.milktea.service.RestaurantService;
 import com.phuclong.milktea.milktea.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class AdminDrinkController {
     private UserService userService;
     @Autowired
     private RestaurantService restaurantService;
+    @Autowired
+    private PromotionService promotionService;
 
     @PostMapping
     public ResponseEntity<Drink> createDrink(@RequestBody CreateDrinkRequest req,
@@ -52,6 +55,8 @@ public class AdminDrinkController {
         User user = userService.findUserByJwtToken(jwt);
 
         Drink drink = drinkService.updateAvailabilityStatus(id);
+
+        drink = promotionService.getDrinkPromotion(drink.getId());
 
         return new ResponseEntity<>(drink, HttpStatus.CREATED);
     }

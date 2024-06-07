@@ -14,6 +14,7 @@ public class DiscountServiceImp implements DiscountService{
     private DiscountRepository discountRepository;
     @Autowired
     private DrinkService drinkService;
+
     @Override
     public Discount createDiscount(Discount discount) {
         return discountRepository.save(discount);
