@@ -5,6 +5,7 @@ import com.phuclong.milktea.milktea.model.Restaurant;
 import com.phuclong.milktea.milktea.model.User;
 import com.phuclong.milktea.milktea.request.CreateDrinkRequest;
 import com.phuclong.milktea.milktea.service.DrinkService;
+import com.phuclong.milktea.milktea.service.PromotionService;
 import com.phuclong.milktea.milktea.service.RestaurantService;
 import com.phuclong.milktea.milktea.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class DrinkController {
     private UserService userService;
     @Autowired
     private RestaurantService restaurantService;
+    @Autowired
+    private PromotionService promotionService;
 
     @GetMapping("/search")
     public ResponseEntity<List<Drink>> searchDrink(@RequestParam String name,
@@ -71,5 +74,22 @@ public class DrinkController {
                 findDrinkById(id);
 
         return new ResponseEntity<>(drink, HttpStatus.OK);
+    }
+
+    @GetMapping("/promotion/restaurant/{restaurantId}")
+    private ResponseEntity<List<Drink>> getFilterDrinksRestaurantPromotion(
+            @PathVariable Long restaurantId,
+            @RequestParam boolean vagetarian,
+            @RequestParam boolean nonveg,
+            @RequestParam boolean seasonal,
+            @RequestParam(required = false) String drinkCategory,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        List<Drink> drinks = promotionService.getFilterRestaurantsDrink(restaurantId,
+                vagetarian, nonveg,
+                seasonal, drinkCategory);
+
+        return new ResponseEntity<>(drinks, HttpStatus.OK);
     }
 }
